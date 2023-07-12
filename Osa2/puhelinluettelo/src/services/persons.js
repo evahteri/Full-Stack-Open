@@ -3,7 +3,12 @@ const baseUrl = 'http://localhost:3001/persons'
 
 const getAll = () => {
     const request = axios.get(baseUrl)
-    return request.then(response => response.data)
+    const fakePerson ={
+        id: 10000,
+        name: "Jane Doe",
+        number: "0100100"
+    }
+    return request.then(response => response.data.concat(fakePerson))
 }
 
 const addPerson = newObject => {
