@@ -87,6 +87,12 @@ const App = () => {
       setPersons(persons.filter(p => p.id !== person.id))
     }
     )
+    setSuccessMessage(
+      `${newName} edited successfully!`
+    )
+    setTimeout( () => {
+      setSuccessMessage(null)
+    }, 5000 )
   }
 
 
