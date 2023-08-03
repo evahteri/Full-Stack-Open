@@ -111,7 +111,10 @@ const App = () => {
         returnedPerson => {
           setPersons(persons.concat(returnedPerson))
         }
-      )
+      ).catch(error => {
+        console.log(error.response.data)
+        setErrorMessage(`${error.response.data.error}`)
+      })
     }
     setSuccessMessage(
       `${newName} added successfully!`
