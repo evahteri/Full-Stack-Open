@@ -127,6 +127,29 @@ test('a blog can be deleted', async () => {
 
 })
 
+test('blog can be edited', async () => {
+  const newBlog =   {
+    title: 'Test blog title',
+    author: 'Test blog author',
+    url: 'www.testblogurl.com',
+    likes: 2
+  }
+
+  const response = await api.get('/api/blogs')
+
+  const oldLikes = initialBlogs[0].likes
+
+  const blogId = response.body[0].id
+
+  const response2 = await api
+    .put(`/api/blogs/${blogId}`)
+    .send(newBlog)
+    .expect(200)
+
+  expect(response2.body.likes).toEqual(oldLikes + 1)
+
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
