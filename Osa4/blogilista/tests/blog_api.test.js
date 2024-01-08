@@ -85,6 +85,28 @@ test('if new blog does not have likes-field, value will be 0', async () => {
   expect(response.body[initialBlogs.length].likes).toEqual(0)
 })
 
+test('if new blog does not have url, 400 will be returned', async () => {
+  const newBlog = {
+    title: 'New blog without url',
+    author: 'Tester eero',
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
+test('if new blog does not have title, 400 will be returned', async () => {
+  const newBlog = {
+    author: 'Tester eero',
+    url: 'www.newblog.com'
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })

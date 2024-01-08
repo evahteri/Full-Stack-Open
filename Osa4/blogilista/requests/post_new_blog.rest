@@ -4,6 +4,5 @@ Content-Type: application/json
 {
     "title": "Album Review yea",
     "author": "evahteri",
-    "url": "google.com",
     "likes": 13
 }
