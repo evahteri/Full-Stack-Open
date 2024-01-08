@@ -11,7 +11,7 @@ const initialBlogs = [
     likes: 1
   },
   {
-    title: 'Another test blog title',
+    title: 'Another testing blog title',
     author: 'another author',
     url: 'www.anothertestblogurl.com',
     likes: 2
@@ -105,6 +105,26 @@ test('if new blog does not have title, 400 will be returned', async () => {
     .post('/api/blogs')
     .send(newBlog)
     .expect(400)
+})
+
+test('a blog can be deleted', async () => {
+
+  const response = await api.get('/api/blogs')
+
+  const blogId = response.body[0].id
+
+  await api
+    .delete(`/api/blogs/${blogId}`)
+
+  const response2 = await api.get('/api/blogs')
+
+  const titles = response2.body.map(r => r.title)
+
+  expect(titles.length).toEqual(initialBlogs.length-1)
+  expect(titles).toContain(
+    'Another testing blog title'
+  )
+
 })
 
 afterAll(async () => {
