@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import ErrorNotification from './components/ErrorNotification'
+import SuccessNotification from './components/SuccessNotification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -11,6 +13,8 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -42,7 +46,9 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('wrong credentials')
+      setErrorMessage(
+        `Wrong username or password`
+      )
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -53,6 +59,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
+        <ErrorNotification message={errorMessage} />
         <form onSubmit={handleLogin}>
         <div>
           username
@@ -85,6 +92,10 @@ const App = () => {
       const blog = await blogService.create({
         title, author, url
       })
+      setSuccessMessage(`a new blog '${blog.title}' by '${blog.author}' added`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
     } catch (exception) {
       setErrorMessage('something went wrong')
       setTimeout(() => {
@@ -96,6 +107,8 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <ErrorNotification message={errorMessage} />
+      <SuccessNotification message={successMessage} />
       <p>{user.name} logged in</p>
 
       <button onClick={() => window.localStorage.removeItem('loggedBlogappUser')}>logout</button>
