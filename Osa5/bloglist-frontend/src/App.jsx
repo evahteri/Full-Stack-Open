@@ -16,9 +16,12 @@ const App = () => {
   const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    const getBlogs = async () => {
+      const blogs = await blogService.getAll()
+      setBlogs(blogs)
+    }
+
+    getBlogs()
   }, [])
   
   useEffect(() => {
