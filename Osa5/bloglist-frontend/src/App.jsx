@@ -12,12 +12,8 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
-  const [blogFormVisible, setBlogFormVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -88,45 +84,30 @@ const App = () => {
     )
   }
 
-  const handleNewblog = async (event) => {
-    event.preventDefault()
-    
-    try {
-      const blog = await blogService.create({
-        title, author, url
-      })
-      setSuccessMessage(`a new blog '${blog.title}' by '${blog.author}' added`)
-      setTimeout(() => {
-        setSuccessMessage(null)
-      }, 5000)
-    } catch (exception) {
-      setErrorMessage('something went wrong')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
-  }
-
   const blogForm = () => {
-    const hideWhenVisible = { display: blogFormVisible ? 'none' : '' }
-    const showWhenVisible = { display: blogFormVisible ? '' : 'none' }
-
     return <div>
-      <div style={hideWhenVisible}>
-      </div>
       <Togglable buttonLabel='new blog'>
-        <BlogForm
-          author={author}
-          url={url}
-          title={title}
-          handleCreateBlog={handleNewblog}
-          handleAuthorChange={({ target }) => setAuthor(target.value)}
-          handleUrlChange={({ target }) => setUrl(target.value)}
-          handleTitleChange={({ target }) => setTitle(target.value)}
+        <BlogForm handleErrorNotification={handleErrorNotification}
+        handleSuccessNotification={handleSuccessNotification}
         />
         </Togglable>
       </div>
   }
+
+  const handleErrorNotification = (message) => {
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+
+  const handleSuccessNotification = (message) => {
+    setSuccessMessage(message)
+    setTimeout(() => {
+      setSuccessMessage(null)
+    }, 5000)
+  }
+
 
 
   return (

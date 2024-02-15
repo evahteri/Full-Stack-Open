@@ -1,14 +1,39 @@
-const BlogForm = ({
-  handleCreateBlog,
-  handleTitleChange,
-  handleAuthorChange,
-  handleUrlChange,
-  title,
-  author,
-  url
-}) => {
+import { useState, useEffect } from 'react'
+import blogService from '../services/blogs'
+
+
+const BlogForm = ({handleSuccessNotification, handleErrorNotification}) => {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value)
+  }
+
+  const handleAuthorChange = (event) => {
+    setAuthor(event.target.value)
+  }
+
+  const handleUrlChange = (event) => {
+    setUrl(event.target.value)
+  }
+
+  const handleNewBlog = async (event) => {
+    event.preventDefault()
+    
+    try {
+      const blog = await blogService.create({
+        title, author, url
+      })
+      handleSuccessNotification(`a new blog '${blog.title}' by '${blog.author}' added`)
+    } catch (exception) {
+      handleErrorNotification('something went wrong')
+    }
+  }
+
   return (
-    <form onSubmit={handleCreateBlog}>
+    <form onSubmit={handleNewBlog}>
       <h2>create new</h2>
   
       <div>
