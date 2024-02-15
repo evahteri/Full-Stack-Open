@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import blogService from '../services/blogs'
 
 
-const BlogForm = ({handleSuccessNotification, handleErrorNotification}) => {
+const BlogForm = ({handleSuccessNotification, handleErrorNotification, blogs, setBlogs}) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -26,6 +26,7 @@ const BlogForm = ({handleSuccessNotification, handleErrorNotification}) => {
       const blog = await blogService.create({
         title, author, url
       })
+      setBlogs(blogs.concat(blog))
       handleSuccessNotification(`a new blog '${blog.title}' by '${blog.author}' added`)
     } catch (exception) {
       handleErrorNotification('something went wrong')

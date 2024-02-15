@@ -89,6 +89,8 @@ const App = () => {
       <Togglable buttonLabel='new blog'>
         <BlogForm handleErrorNotification={handleErrorNotification}
         handleSuccessNotification={handleSuccessNotification}
+        blogs={blogs}
+        setBlogs={setBlogs}
         />
         </Togglable>
       </div>
