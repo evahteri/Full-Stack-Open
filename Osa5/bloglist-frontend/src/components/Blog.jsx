@@ -64,7 +64,7 @@ const Blog = ({ blog, user, blogs, setBlogs }) => {
   }
   if (fullInfo)
     return (
-      <div style={blogStyle}>
+      <div style={blogStyle} className='blog'>
         {blog.title} <button onClick={toggleFullInfo}>hide</button> <br />
         {blog.url} <br />
         likes {likes} <button onClick={(event) => handleLike(event, blog)}>like</button> <br />
@@ -76,7 +76,7 @@ const Blog = ({ blog, user, blogs, setBlogs }) => {
     )
   else
     return (
-      <div style={blogStyle}>
+      <div style={blogStyle} className='blog'>
         {blog.title} {blog.author} <button onClick={toggleFullInfo}>view</button>
       </div>
     )
