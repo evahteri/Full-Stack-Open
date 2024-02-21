@@ -87,14 +87,25 @@ const App = () => {
     )
   }
 
+  const handleNewBlog = async (newBlog) => {
+    const title = newBlog.title
+    const author = newBlog.author
+    const url = newBlog.url
+    try {
+      const blog = await blogService.create({
+        title, author, url
+      })
+      setBlogs(blogs.concat(blog))
+      handleSuccessNotification(`a new blog '${blog.title}' by '${blog.author}' added`)
+    } catch (exception) {
+      handleErrorNotification('something went wrong')
+    }
+  }
+
   const blogForm = () => {
     return <div>
       <Togglable buttonLabel='new blog'>
-        <BlogForm handleErrorNotification={handleErrorNotification}
-          handleSuccessNotification={handleSuccessNotification}
-          blogs={blogs}
-          setBlogs={setBlogs}
-        />
+        <BlogForm handleNewBlog={handleNewBlog}/>
       </Togglable>
     </div>
   }
@@ -112,8 +123,6 @@ const App = () => {
       setSuccessMessage(null)
     }, 5000)
   }
-
-
 
   return (
     <div>

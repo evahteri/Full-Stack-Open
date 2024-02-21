@@ -3,6 +3,7 @@ import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
+import BlogForm from './BlogForm'
 
 test('renders title', () => {
 
@@ -57,9 +58,35 @@ test('url, likes and user are shown when view button is pressed', async () => {
 
   const div = container.querySelector('.blog')
   expect(div).toHaveTextContent(
-    'This is a test title',
-    'Test Author',
-    'likes: 0',
-    'www.testingurl.com'
+    'This is a test title'
   )
+  expect(div).toHaveTextContent('Test Author')
+  expect(div).toHaveTextContent('likes 0')
+  expect(div).toHaveTextContent('www.testingurl.com')
+})
+
+test('like event handler is called twice when button is pressed twice', async () => {
+  // TODO
+})
+
+test('blogform calls event handler with the right details', async () => {
+  const mockUser = userEvent.setup()
+  const mockHandleNewBlog = jest.fn()
+
+  render (
+    <BlogForm handleNewBlog={mockHandleNewBlog}/>
+  )
+  const titleInput = screen.getByPlaceholderText('Title')
+  const authorInput = screen.getByPlaceholderText('Author')
+  const urlInput = screen.getByPlaceholderText('Url')
+  const sendButton = screen.getByText('create')
+
+  await mockUser.type(titleInput, 'Clean Code')
+  await mockUser.type(authorInput, 'Martin')
+  await mockUser.type(urlInput, 'www.blog.fi')
+  await mockUser.click(sendButton)
+  expect(mockHandleNewBlog.mock.calls).toHaveLength(1)
+  expect(mockHandleNewBlog.mock.calls[0][0].author).toBe('Martin')
+  expect(mockHandleNewBlog.mock.calls[0][0].title).toBe('Clean Code')
+  expect(mockHandleNewBlog.mock.calls[0][0].url).toBe('www.blog.fi')
 })

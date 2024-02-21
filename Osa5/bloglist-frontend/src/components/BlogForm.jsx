@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import blogService from '../services/blogs'
 
 
-const BlogForm = ({ handleSuccessNotification, handleErrorNotification, blogs, setBlogs }) => {
+const BlogForm = ({ handleNewBlog }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -20,22 +19,18 @@ const BlogForm = ({ handleSuccessNotification, handleErrorNotification, blogs, s
     setUrl(event.target.value)
   }
 
-  const handleNewBlog = async (event) => {
+  const handleCreateNewBlog = async (event) => {
     event.preventDefault()
+    await handleNewBlog( {
+      title: title,
+      author: author,
+      url: url
+    })
 
-    try {
-      const blog = await blogService.create({
-        title, author, url
-      })
-      setBlogs(blogs.concat(blog))
-      handleSuccessNotification(`a new blog '${blog.title}' by '${blog.author}' added`)
-    } catch (exception) {
-      handleErrorNotification('something went wrong')
-    }
   }
 
   return (
-    <form onSubmit={handleNewBlog}>
+    <form onSubmit={handleCreateNewBlog}>
       <h2>create new</h2>
 
       <div>
@@ -45,6 +40,7 @@ const BlogForm = ({ handleSuccessNotification, handleErrorNotification, blogs, s
           value={title}
           name="Title"
           onChange={handleTitleChange}
+          placeholder='Title'
         />
       </div>
       <div>
@@ -54,6 +50,7 @@ const BlogForm = ({ handleSuccessNotification, handleErrorNotification, blogs, s
           value={author}
           name="Author"
           onChange={handleAuthorChange}
+          placeholder='Author'
         />
       </div>
       <div>
@@ -63,6 +60,7 @@ const BlogForm = ({ handleSuccessNotification, handleErrorNotification, blogs, s
           value={url}
           name="Url"
           onChange={handleUrlChange}
+          placeholder='Url'
         />
       </div>
       <button type="submit">create</button>
@@ -71,10 +69,7 @@ const BlogForm = ({ handleSuccessNotification, handleErrorNotification, blogs, s
 }
 
 BlogForm.propTypes = {
-  handleSuccessNotification: PropTypes.func.isRequired,
-  handleErrorNotification: PropTypes.func.isRequired,
-  blogs: PropTypes.array.isRequired,
-  setBlogs: PropTypes.func.isRequired
+  handleNewBlog: PropTypes.func.isRequired,
 }
 
 export default BlogForm
