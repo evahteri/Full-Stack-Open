@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, user, blogs, setBlogs }) => {
   const [fullInfo, setfullInfo] = useState(false)
 
 
@@ -10,6 +10,22 @@ const Blog = ({ blog }) => {
       setfullInfo(false)
     else
       setfullInfo(true)
+  }
+
+  const handleRemove = async (event, blog) => {
+    event.preventDefault()
+
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      try {
+        const response = await blogService.remove(blog.id)
+
+        setBlogs(blogs.filter(b => b.id !== blog.id))
+      }
+      catch (exception) {
+        console.log('error')
+      }
+    }
+    
   }
 
   const handleLike = async (event, blogObject) => {
@@ -24,11 +40,13 @@ const Blog = ({ blog }) => {
     
     try {
       const blog = await blogService.update(blogObject.id, newBlogObject)
-      console.log('success')
-      console.log(blog)
     } catch (exception) {
       console.log('error')
     }
+  }
+  const removeButtonStyle = {
+    backgroundColor: 'red'
+
   }
 
   const blogStyle = {
@@ -40,12 +58,18 @@ const Blog = ({ blog }) => {
   }
   if (fullInfo)
     return (
+      console.log(blog.user),
+      console.log(user),
       <div style={blogStyle}>
         {blog.title} <button onClick={toggleFullInfo}>hide</button> <br />
         {blog.url} <br />
         likes {blog.likes} <button onClick={(event) => handleLike(event, blog)}>like</button> <br />
-        {blog.author}
-      </div>)
+        {blog.author} <br />
+        {blog.user.username === user.username && (
+          <button style={removeButtonStyle} onClick={(event) => handleRemove(event, blog)}>remove</button>
+        )}
+      </div>
+    )
   else
     return (
       <div style={blogStyle}>

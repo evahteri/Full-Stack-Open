@@ -43,12 +43,12 @@ blogsRouter.delete('/:id', tokenExtractor, userExtractor , async (request, respo
 
   console.log('blog user id', blog.user.toString())
 
-  if (blog.user.toString() !== user.id.toString()) {
-    return response.status(401).json({ error: 'Only the creator of the blog can delete it' })
+  if (blog.user.toString() === user.id.toString()) {
+    await Blog.findByIdAndDelete(request.params.id)
+    response.status(204).end()
   }
-
-  await Blog.deleteOne({ id: request.params.id })
-  response.status(204).json(blog)
+  else
+    response.status(401).json({ error: 'Only the creator of the blog can delete it' })
 })
 
 blogsRouter.put('/:id', async (request, response) => {
