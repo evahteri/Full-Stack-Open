@@ -3,6 +3,11 @@ import blogService from '../services/blogs'
 
 const Blog = ({ blog, user, blogs, setBlogs }) => {
   const [fullInfo, setfullInfo] = useState(false)
+  const [likes, setLikes] = useState('')
+
+  useEffect(() => {
+    setLikes(blog.likes)
+  }, [blog.likes])
 
 
   const toggleFullInfo = () => {
@@ -25,7 +30,7 @@ const Blog = ({ blog, user, blogs, setBlogs }) => {
         console.log('error')
       }
     }
-    
+
   }
 
   const handleLike = async (event, blogObject) => {
@@ -37,9 +42,10 @@ const Blog = ({ blog, user, blogs, setBlogs }) => {
       likes: blogObject.likes + 1,
       user: blogObject.user.id
     }
-    
+
     try {
       const blog = await blogService.update(blogObject.id, newBlogObject)
+      setLikes(blog.likes)
     } catch (exception) {
       console.log('error')
     }
@@ -58,12 +64,10 @@ const Blog = ({ blog, user, blogs, setBlogs }) => {
   }
   if (fullInfo)
     return (
-      console.log(blog.user),
-      console.log(user),
       <div style={blogStyle}>
         {blog.title} <button onClick={toggleFullInfo}>hide</button> <br />
         {blog.url} <br />
-        likes {blog.likes} <button onClick={(event) => handleLike(event, blog)}>like</button> <br />
+        likes {likes} <button onClick={(event) => handleLike(event, blog)}>like</button> <br />
         {blog.author} <br />
         {blog.user.username === user.username && (
           <button style={removeButtonStyle} onClick={(event) => handleRemove(event, blog)}>remove</button>

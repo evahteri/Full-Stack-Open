@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import blogService from '../services/blogs'
 
 
-const BlogForm = ({handleSuccessNotification, handleErrorNotification, blogs, setBlogs}) => {
+const BlogForm = ({ handleSuccessNotification, handleErrorNotification, blogs, setBlogs }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -21,7 +22,7 @@ const BlogForm = ({handleSuccessNotification, handleErrorNotification, blogs, se
 
   const handleNewBlog = async (event) => {
     event.preventDefault()
-    
+
     try {
       const blog = await blogService.create({
         title, author, url
@@ -36,7 +37,7 @@ const BlogForm = ({handleSuccessNotification, handleErrorNotification, blogs, se
   return (
     <form onSubmit={handleNewBlog}>
       <h2>create new</h2>
-  
+
       <div>
         title:
         <input
@@ -67,6 +68,13 @@ const BlogForm = ({handleSuccessNotification, handleErrorNotification, blogs, se
       <button type="submit">create</button>
     </form>
   )
+}
+
+BlogForm.propTypes = {
+  handleSuccessNotification: PropTypes.func.isRequired,
+  handleErrorNotification: PropTypes.func.isRequired,
+  blogs: PropTypes.array.isRequired,
+  setBlogs: PropTypes.func.isRequired
 }
 
 export default BlogForm

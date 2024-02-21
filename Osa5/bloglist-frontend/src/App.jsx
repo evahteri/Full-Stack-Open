@@ -10,7 +10,7 @@ import Togglable from './components/Togglable'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
@@ -23,7 +23,7 @@ const App = () => {
 
     getBlogs()
   }, [])
-  
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -35,7 +35,7 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password,
@@ -49,7 +49,7 @@ const App = () => {
       setPassword('')
     } catch (exception) {
       setErrorMessage(
-        `Wrong username or password`
+        'Wrong username or password'
       )
       setTimeout(() => {
         setErrorMessage(null)
@@ -63,26 +63,26 @@ const App = () => {
         <h2>Log in to application</h2>
         <ErrorNotification message={errorMessage} />
         <form onSubmit={handleLogin}>
-        <div>
-          username
+          <div>
+            username
             <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
+              type="text"
+              value={username}
+              name="Username"
+              onChange={({ target }) => setUsername(target.value)}
+            />
+          </div>
+          <div>
+            password
             <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
+              type="password"
+              value={password}
+              name="Password"
+              onChange={({ target }) => setPassword(target.value)}
+            />
+          </div>
+          <button type="submit">login</button>
+        </form>
       </div>
     )
   }
@@ -91,12 +91,12 @@ const App = () => {
     return <div>
       <Togglable buttonLabel='new blog'>
         <BlogForm handleErrorNotification={handleErrorNotification}
-        handleSuccessNotification={handleSuccessNotification}
-        blogs={blogs}
-        setBlogs={setBlogs}
+          handleSuccessNotification={handleSuccessNotification}
+          blogs={blogs}
+          setBlogs={setBlogs}
         />
-        </Togglable>
-      </div>
+      </Togglable>
+    </div>
   }
 
   const handleErrorNotification = (message) => {
@@ -123,7 +123,7 @@ const App = () => {
       <p>{user.name} logged in</p>
 
       <button onClick={() => window.localStorage.removeItem('loggedBlogappUser')}>logout</button>
-      
+
       {blogForm()}
 
       {blogs
