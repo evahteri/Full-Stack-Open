@@ -70,6 +70,7 @@ const App = () => {
               value={username}
               name="Username"
               onChange={({ target }) => setUsername(target.value)}
+              id='username'
             />
           </div>
           <div>
@@ -79,9 +80,10 @@ const App = () => {
               value={password}
               name="Password"
               onChange={({ target }) => setPassword(target.value)}
+              id='password'
             />
           </div>
-          <button type="submit">login</button>
+          <button type="submit" id='login_button'>login</button>
         </form>
       </div>
     )
@@ -104,7 +106,7 @@ const App = () => {
 
   const blogForm = () => {
     return <div>
-      <Togglable buttonLabel='new blog'>
+      <Togglable buttonLabel='new blog' id='new_blog_button'>
         <BlogForm handleNewBlog={handleNewBlog}/>
       </Togglable>
     </div>
@@ -131,13 +133,13 @@ const App = () => {
       <SuccessNotification message={successMessage} />
       <p>{user.name} logged in</p>
 
-      <button onClick={() => window.localStorage.removeItem('loggedBlogappUser')}>logout</button>
+      <button onClick={() => window.localStorage.removeItem('loggedBlogappUser')}id='logout_button'>logout</button>
 
       {blogForm()}
 
       {blogs
         .sort((a, b) => b.likes - a.likes)
-        .map(blog => <Blog key={blog.id} blog={blog} user={user} blogs={blogs} setBlogs={setBlogs} />)
+        .map(blog => <Blog key={blog.id} blog={blog} user={user} blogs={blogs} setBlogs={setBlogs} handleErrorNotification={handleErrorNotification} handleSuccessNotification={handleSuccessNotification}/>)
       }
     </div>
   )

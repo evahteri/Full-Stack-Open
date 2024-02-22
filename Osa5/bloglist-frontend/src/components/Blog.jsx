@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, user, blogs, setBlogs }) => {
+const Blog = ({ blog, user, blogs, setBlogs, handleErrorNotification, handleSuccessNotification }) => {
   const [fullInfo, setfullInfo] = useState(false)
   const [likes, setLikes] = useState('')
 
@@ -25,8 +25,10 @@ const Blog = ({ blog, user, blogs, setBlogs }) => {
         const response = await blogService.remove(blog.id)
 
         setBlogs(blogs.filter(b => b.id !== blog.id))
+        handleSuccessNotification(`${blog.title} by ${blog.author} has been removed`)
       }
       catch (exception) {
+        handleErrorNotification('Error: Blog could not be removed')
         console.log('error')
       }
     }
@@ -67,17 +69,17 @@ const Blog = ({ blog, user, blogs, setBlogs }) => {
       <div style={blogStyle} className='blog'>
         {blog.title} <button onClick={toggleFullInfo}>hide</button> <br />
         {blog.url} <br />
-        likes {likes} <button onClick={(event) => handleLike(event, blog)}>like</button> <br />
+        likes {likes} <button id='like_button' onClick={(event) => handleLike(event, blog)}>like</button> <br />
         {blog.author} <br />
         {blog.user.username === user.username && (
-          <button style={removeButtonStyle} onClick={(event) => handleRemove(event, blog)}>remove</button>
+          <button id='remove_button' style={removeButtonStyle} onClick={(event) => handleRemove(event, blog)}>remove</button>
         )}
       </div>
     )
   else
     return (
       <div style={blogStyle} className='blog'>
-        {blog.title} {blog.author} <button onClick={toggleFullInfo}>view</button>
+        {blog.title} {blog.author} <button onClick={toggleFullInfo} id='view_button'>view</button>
       </div>
     )
 }
